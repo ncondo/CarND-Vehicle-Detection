@@ -129,7 +129,7 @@ def single_img_features(img, color_space='RGB', spatial_size=(32, 32),
         if hog_channel == 'ALL':
             hog_features = []
             for channel in range(feature_image.shape[2]):
-                hog_features.extend(get_hog_features(feature_image[:,:,channel], 
+                hog_features.append(get_hog_features(feature_image[:,:,channel], 
                                     orient, pix_per_cell, cell_per_block, 
                                     vis=False, feature_vec=True))
             hog_features = np.concatenate(hog_features)      
@@ -358,7 +358,7 @@ if __name__=='__main__':
         t1 = time.time()
         img = mpimg.imread(img_src)
         draw_img = np.copy(img)
-        img = img.astype(np.float32)
+        img = img.astype(np.float32)/255
         print(np.min(img), np.max(img))
 
         windows = slide_window(img, x_start_stop=[None, None], y_start_stop=y_start_stop,
