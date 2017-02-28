@@ -374,7 +374,7 @@ def draw_labeled_bboxes(img, labels):
 
 def process_image(img):
 
-    out_img, heat_map = find_cars(img, 1.5)
+    out_img, heat_map = find_cars(img, scale)
     heat_map = apply_threshold(heat_map, 1)
     labels = label(heat_map)
     # Draw bounding boxes on a copy of the image
@@ -496,7 +496,12 @@ if __name__=='__main__':
         plt.imsave('./output_images/heatmap'+str(idx+1)+'.jpg', heat_map)
 
     """
+
     from moviepy.editor import VideoFileClip
+
+    ystart = 400
+    ystop = 656
+    scale = 1.5
 
     test_output = 'test.mp4'
     clip = VideoFileClip('project_video.mp4')
