@@ -125,9 +125,10 @@ def process_image(img):
     #heat_map = apply_threshold(heat_map, 1)
 
     global heatmap_sum
+    global heatmaps
     heatmap_sum = heatmap_sum + heat_map
     heatmaps.append(heat_map)
-    if len(heatmaps)>12:
+    if len(heatmaps)>10:
         old_heatmap = heatmaps.pop(0)
         heatmap_sum -= old_heatmap
         heatmap_sum = np.clip(heatmap_sum,0.0,1000000.00)
