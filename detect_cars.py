@@ -122,7 +122,7 @@ def process_image(img):
     out_img, heat_map = find_cars(img, scale=scale, ystart=ystart, ystop=ystop,
                             pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
                             orient=orient, spatial_size=spatial_size, hist_bins=hist_bins)
-    heat_map = apply_threshold(heat_map, 1)
+    #heat_map = apply_threshold(heat_map, 1)
 
     global heatmap_sum
     heatmap_sum = heatmap_sum + heat_map
@@ -134,7 +134,7 @@ def process_image(img):
     #heatmap_avg = np.divide(heatmap_sum, len(heatmaps))
     #heatmap_avg = apply_threshold(heatmap_avg, 1)
     #labels = label(heatmap_avg)
-    heatmap_sum_thresh = apply_threshold(heatmap_sum, 8)
+    heatmap_sum_thresh = apply_threshold(heatmap_sum, 5)
     labels = label(heatmap_sum_thresh)
     # Draw bounding boxes on a copy of the image
     draw_img = draw_labeled_bboxes(np.copy(img), labels)
