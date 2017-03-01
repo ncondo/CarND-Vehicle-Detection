@@ -116,11 +116,25 @@ def process_image(img):
     spatial_size = (32, 32)
     hist_bins = 32
 
-    ystart = 400
-    ystop = 720 #656
-    scale = 1.75
-    out_img, heat_map = find_cars(img, scale, ystart, ystop, pix_per_cell, cell_per_block, orient, spatial_size, hist_bins)
-    heat_map = apply_threshold(heat_map, 1)
+    #ystart = 380 #400
+    #ystop = 700 #656
+    #scale = 1.75
+    out_img1, heat_map1 = find_cars(img, scale=1.25, ystart=380, ystop=444,
+                            pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
+                            orient=orient, spatial_size=spatial_size, hist_bins=hist_bins)
+    heat_map1 = apply_threshold(heat_map1, 1)
+
+    out_img2, heat_map2 = find_cars(img, scale=1.5, ystart=444, ystop=636,
+                            pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
+                            orient=orient, spatial_size=spatial_size, hist_bins=hist_bins)
+    heat_map2 = apply_threshold(heat_map2, 1)
+
+    out_img3, heat_map3 = find_cars(img, scale=1.75, ystart=636, ystop=700,
+                            pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
+                            orient=orient, spatial_size=spatial_size, hist_bins=hist_bins)
+    heat_map3 = apply_threshold(heat_map3, 1)
+
+
     """
     global heatmap_sum
     heatmap_sum = heatmap_sum + heat_map
@@ -133,10 +147,14 @@ def process_image(img):
     heatmap_avg = apply_threshold(heatmap_avg, 1)
     labels = label(heatmap_avg)
     """
-    labels = label(heat_map)
+    labels1 = label(heat_map1)
+    labels2 = label(heat_map2)
+    labels3 = label(heat_map3)
     # Draw bounding boxes on a copy of the image
-    draw_img = draw_labeled_bboxes(np.copy(img), labels)
-    return draw_img
+    draw_img1 = draw_labeled_bboxes(np.copy(img), labels1)
+    draw_img2 = draw_labeled_bboxes(np.copy(draw_img1), labels2)
+    draw_img3 = draw_labeled_bboxes(np.copy(draw_img2), labels3)
+    return draw_img3
 
 
 if __name__=='__main__':
