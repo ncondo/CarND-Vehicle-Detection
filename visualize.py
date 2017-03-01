@@ -1,11 +1,19 @@
 from skimage.feature import hog
-from detect_cars import get_hog_features
+from features import get_hog_features
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+from sklearn.externals import joblib
+from scipy.ndimage.measurements import label
+import pickle
 import numpy as np
 import cv2
 import glob
+from detect_car import find_cars, apply_threshold, draw_labeled_bboxes
 
+
+# Load classifier for predicting cars
+svc = joblib.load('classifier.pkl')
+X_scaler = pickle.load(open('scaler.p', 'rb'))
 
 def display_hog(images):
 
@@ -23,20 +31,34 @@ def display_hog(images):
 
 
 def display_heatmap(images):
+
+    orient = 9
+    pix_per_cell = 8
+    cell_per_block = 2
+    spatial_size = (32, 32)
+    hist_bins = 32
     
     ystart = 400
     ystop = 656
     scale = 1.5
+
     # Iterate over test images
     for idx, img_src in enumerate(images):
         img = mpimg.imread(img_src)
-        out_img, heat_map = find_cars(img, scale)
+        out_img, heat_map = find_cars(img, scale, ystart, ystop, pix_per_cell,
+                                cell_per_block, orient, spatial_size, hist_bins)
         heat_map = apply_threshold(heat_map, 1)
         
         
         plt.imsave('./output_images/heatmap'+str(idx+1)+'.jpg', heat_map)
 
 def display_bboxes(images):
+
+    orient = 9
+    pix_per_cell = 8
+    cell_per_block = 2
+    spatial_size = (32, 32)
+    hist_bins = 32
     
     ystart = 400
     ystop = 656
@@ -44,7 +66,8 @@ def display_bboxes(images):
     # Iterate over test images
     for idx, img_src in enumerate(images):
         img = mpimg.imread(img_src)
-        out_img, heat_map = find_cars(img, scale)
+        out_img, heat_map = find_cars(img, scale, ystart, ystop, pix_per_cell,
+                                cell_per_block, orient, spatial_size, hist_bins)
         heat_map = apply_threshold(heat_map, 1)
         labels = label(heat_map)
         draw_img = draw_labeled_bboxes(np.copy(img), labels)
@@ -54,7 +77,10 @@ def display_bboxes(images):
 if __name__=='__main__':
 
     test_images = glob.glob('./test_images/test*.jpg')
+    # Display hog features on test images
     display_hog(test_images)
-
-
+    # Display heatmap
+    display_heatmap(test_images)
+    # Display bboxes
+    display_bboxes(test_images)
 

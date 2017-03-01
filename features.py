@@ -94,13 +94,13 @@ def extract_features(imgs, color_space='RGB', spatial_size=(32, 32), hist_bins=3
 def get_data():
     # Read in car / non-car images
     cars = []
-    with open('cars.txt', 'r') as f:
+    with open('data/cars.txt', 'r') as f:
         for fname in f:
             cars.append(fname.rstrip('\n'))
     f.close()
 
     non_cars = []
-    with open('non_cars.txt', 'r') as f:
+    with open('data/non_cars.txt', 'r') as f:
         for fname in f:
             non_cars.append(fname.rstrip('\n'))
     f.close()
@@ -111,7 +111,7 @@ def get_data():
 if __name__=='__main__':
 
     # Get image file names
-    cars, noncars = get_data()
+    cars, non_cars = get_data()
     # Print number of car and non-car images
     print('Number of vehicle images found:', len(cars))
     print('Number of non-vehicle images found:', len(non_cars))
@@ -136,7 +136,7 @@ if __name__=='__main__':
                                     pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
                                     hog_channel=hog_channel, spatial_feat=spatial_feat,
                                     hist_feat=hist_feat, hog_feat=hog_feat)
-    noncar_features = extract_features(noncars, color_space=color_space,
+    noncar_features = extract_features(non_cars, color_space=color_space,
                                     spatial_size=spatial_size, hist_bins=hist_bins, orient=orient,
                                     pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
                                     hog_channel=hog_channel, spatial_feat=spatial_feat,

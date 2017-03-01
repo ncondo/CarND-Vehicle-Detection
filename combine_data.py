@@ -14,7 +14,7 @@ def main():
 
     print('Number of vehicle images found:', len(cars))
     # Save all vehicle file names to cars.txt
-    with open('cars.txt', 'w') as f:
+    with open('data/cars.txt', 'w') as f:
         for fname in cars:
             f.write(fname+'\n')
 
@@ -27,7 +27,7 @@ def main():
 
     print('Number of non-vehicle images found:', len(non_cars))
     # Save all non-vehicle file names to non_cars.txt
-    with open('non_cars.txt', 'w') as f:
+    with open('data/non_cars.txt', 'w') as f:
         for fname in non_cars:
             f.write(fname+'\n')
 
