@@ -226,53 +226,19 @@ def search_windows(img, windows, clf, scaler, color_space='RGB',
     return on_windows
 
 
-def visualize(fig, rows, cols, imgs, titles):
-    for i, img in enumerate(imgs):
-        plt.subplot(rows, cols, i+1)
-        plt.title(i+1)
-        img_dims = len(img.shape)
-        if img_dims < 3:
-            plt.imshow(img, cmap='hot')
-            plt.title(titles[i])
-            plt.show()
-        else:
-            plt.imshow(img)
-            plt.title(titles[i])
-            plt.show()
-
-
-def display_image():
-
-    # Read in car / non-car images
-    car_img = mpimg.imread('data/vehicles/GTI_Far/image0000.png')
-    noncar_img = mpimg.imread('data/non-vehicles/Extras/extra1.png')
+def display_hog_images(test_images):
 
     # Define feature parameters
-    color_space = 'RGB'
     orient = 9
     pix_per_cell = 8
     cell_per_block = 2
-    hog_channel = 0
-    spatial_size = (16, 16)
-    hist_bins = 16
-    spatial_feat = True
-    hist_feat = True
-    hog_feat = True
 
-    car_features, car_hog_img = single_img_features(car_img, color_space=color_space,
-                                    spatial_size=spatial_size, hist_bins=hist_bins, orient=orient,
-                                    pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
-                                    hog_channel=hog_channel, spatial_feat=spatial_feat,
-                                    hist_feat=hist_feat, hog_feat=hog_feat, vis=True)
-    noncar_features, noncar_hog_img = single_img_features(noncar_img, color_space=color_space,
-                                    spatial_size=spatial_size, hist_bins=hist_bins, orient=orient,
-                                    pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
-                                    hog_channel=hog_channel, spatial_feat=spatial_feat,
-                                    hist_feat=hist_feat, hog_feat=hog_feat, vis=True)
-    images = [car_img, car_hog_img, noncar_img, noncar_hog_img]
-    titles = ['car image', 'car HOG image', 'non-car image', 'non-car HOG image']
-    fig = plt.figure(figsize=(12,3))
-    visualize(fig, 1, 4, images, titles)
+    for idx, img_src in enumerate(test_images):
+        img = mpimg.imread(img_src)
+        _, hog_image = get_hog_features(img, orient, pix_per_cell,
+                                    cell_per_block, vis=True, feature_vec=False)
+        plt.imsave('./output_images/hog'+str(idx+1)+'.jpg', hog_image)
+
 
 
 def convert_color(img, conv='RGB2YCrCb'):
@@ -381,11 +347,7 @@ def process_image(img):
     draw_img = draw_labeled_bboxes(np.copy(img), labels)
     return draw_img
 
-
-
-if __name__=='__main__':
-    #display_image()
-    
+def get_data():
     # Read in car / non-car images
     cars = []
     with open('cars.txt', 'r') as f:
@@ -402,8 +364,17 @@ if __name__=='__main__':
     print('Number of vehicle images found:', len(cars))
     print('Number of non-vehicle images found:', len(non_cars))
 
-    test_cars = np.array(cars)
-    test_noncars = np.array(non_cars)
+    return np.array(cars), np.array(non_cars)
+
+
+
+if __name__=='__main__':
+    
+    #test_images = glob.glob('./test_images/test*.jpg')
+    #display_hog_images(test_images)
+
+    # Get image file names
+    cars, noncars = get_data()
 
     # Define feature parameters
     color_space = 'YCrCb'
@@ -419,18 +390,20 @@ if __name__=='__main__':
 
     t = time.time()
 
-    car_features = extract_features(test_cars, color_space=color_space,
+    car_features = extract_features(cars, color_space=color_space,
                                     spatial_size=spatial_size, hist_bins=hist_bins, orient=orient,
                                     pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
                                     hog_channel=hog_channel, spatial_feat=spatial_feat,
                                     hist_feat=hist_feat, hog_feat=hog_feat)
-    noncar_features = extract_features(test_noncars, color_space=color_space,
+    noncar_features = extract_features(noncars, color_space=color_space,
                                     spatial_size=spatial_size, hist_bins=hist_bins, orient=orient,
                                     pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
                                     hog_channel=hog_channel, spatial_feat=spatial_feat,
                                     hist_feat=hist_feat, hog_feat=hog_feat)
 
     print(time.time()-t, 'Seconds to compute features...')
+
+    
 
     X = np.vstack((car_features, noncar_features)).astype(np.float64)
     # Fit a per column scaler
@@ -479,7 +452,7 @@ if __name__=='__main__':
         window_img = draw_boxes(draw_img, hot_windows, color=(0, 0, 255), thick=6)
         plt.imsave('./output_images/output'+str(idx+1)+'.jpg', window_img)
         print(time.time()-t1, 'seconds to process one image searching', len(windows), 'windows')
-    
+    """
 
     test_images = glob.glob('./test_images/test*.jpg')
     ystart = 400
@@ -507,5 +480,5 @@ if __name__=='__main__':
     clip = VideoFileClip('project_video.mp4')
     test_clip = clip.fl_image(process_image)
     test_clip.write_videofile(test_output, audio=False)
-
+    """
 
