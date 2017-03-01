@@ -135,7 +135,7 @@ def process_image(img):
     #heatmap_avg = np.divide(heatmap_sum, len(heatmaps))
     #heatmap_avg = apply_threshold(heatmap_avg, 1)
     #labels = label(heatmap_avg)
-    heatmap_sum_thresh = apply_threshold(heatmap_sum, 2)
+    heatmap_sum_thresh = apply_threshold(heatmap_sum, 1)
     labels = label(heatmap_sum_thresh)
     # Draw bounding boxes on a copy of the image
     draw_img = draw_labeled_bboxes(np.copy(img), labels)
