@@ -7,8 +7,8 @@ from scipy.ndimage.measurements import label
 from features import get_hog_features, bin_spatial, color_hist
 
 
-#heatmaps = []
-#heatmap_sum = np.zeros((720, 1280)).astype(np.float64)
+heatmaps = []
+heatmap_sum = np.zeros((720, 1280)).astype(np.float64)
 
 
 def convert_color(img, conv='RGB2YCrCb'):
@@ -124,20 +124,18 @@ def process_image(img):
                             orient=orient, spatial_size=spatial_size, hist_bins=hist_bins)
     heat_map = apply_threshold(heat_map, 1)
 
-
-    """
     global heatmap_sum
     heatmap_sum = heatmap_sum + heat_map
     heatmaps.append(heat_map)
-    if len(heatmaps)>10:
+    if len(heatmaps)>12:
         old_heatmap = heatmaps.pop(0)
         heatmap_sum -= old_heatmap
         heatmap_sum = np.clip(heatmap_sum,0.0,1000000.00)
-    heatmap_avg = np.divide(heatmap_sum, len(heatmaps))
-    heatmap_avg = apply_threshold(heatmap_avg, 1)
-    labels = label(heatmap_avg)
-    """
-    labels = label(heat_map)
+    #heatmap_avg = np.divide(heatmap_sum, len(heatmaps))
+    #heatmap_avg = apply_threshold(heatmap_avg, 1)
+    #labels = label(heatmap_avg)
+    heatmap_sum_thresh = apply_threshold(heatmap_sum, 8)
+    labels = label(heatmap_sum_thresh)
     # Draw bounding boxes on a copy of the image
     draw_img = draw_labeled_bboxes(np.copy(img), labels)
     
