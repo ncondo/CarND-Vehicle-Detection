@@ -117,8 +117,8 @@ def process_image(img):
     hist_bins = 32
 
     ystart = 400
-    ystop = 656
-    scale = 2
+    ystop = 720 #656
+    scale = 1.75
     out_img, heat_map = find_cars(img, scale, ystart, ystop, pix_per_cell, cell_per_block, orient, spatial_size, hist_bins)
     heat_map = apply_threshold(heat_map, 1)
     """
