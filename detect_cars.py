@@ -150,7 +150,7 @@ if __name__=='__main__':
     X_scaler = pickle.load(open('scaler.p', 'rb'))
 
     # Detect cars in project video and save output
-    test_output = 'test.mp4'
+    test_output = 'project_video_output.mp4'
     clip = VideoFileClip('project_video.mp4')
     test_clip = clip.fl_image(process_image)
     test_clip.write_videofile(test_output, audio=False)
