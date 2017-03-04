@@ -116,7 +116,7 @@ def process_image(img):
     spatial_size = (32, 32)
     hist_bins = 32
 
-    ystart = 400
+    ystart = 336
     ystop = 656
     scale = 1.5
     out_img, heat_map = find_cars(img, scale=scale, ystart=ystart, ystop=ystop,
