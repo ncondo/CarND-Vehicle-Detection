@@ -116,7 +116,7 @@ def process_image(img):
     spatial_size = (32, 32)
     hist_bins = 32
 
-    ystart = 336
+    ystart = 400
     ystop = 656
     scale = 1.5
     out_img, heat_map = find_cars(img, scale=scale, ystart=ystart, ystop=ystop,
@@ -128,15 +128,13 @@ def process_image(img):
     global heatmaps
     heatmap_sum = heatmap_sum + heat_map
     heatmaps.append(heat_map)
-    if len(heatmaps)>15:
+    if len(heatmaps)>10:
         old_heatmap = heatmaps.pop(0)
         heatmap_sum -= old_heatmap
         heatmap_sum = np.clip(heatmap_sum,0.0,1000000.00)
     heatmap_avg = np.divide(heatmap_sum, len(heatmaps))
-    heatmap_avg_thresh = apply_threshold(heatmap_avg, 1)
+    heatmap_avg_thresh = apply_threshold(heatmap_avg, 1.5)
     labels = label(heatmap_avg_thresh)
-    #heatmap_sum_thresh = apply_threshold(heatmap_sum, 1)
-    #labels = label(heatmap_sum_thresh)
     # Draw bounding boxes on a copy of the image
     draw_img = draw_labeled_bboxes(np.copy(img), labels)
     
