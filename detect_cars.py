@@ -122,13 +122,13 @@ def process_image(img):
     out_img, heat_map = find_cars(img, scale=scale, ystart=ystart, ystop=ystop,
                             pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
                             orient=orient, spatial_size=spatial_size, hist_bins=hist_bins)
-    heat_map = apply_threshold(heat_map, 1)
+    #heat_map = apply_threshold(heat_map, 1)
 
     global heatmap_sum
     global heatmaps
     heatmap_sum = heatmap_sum + heat_map
     heatmaps.append(heat_map)
-    if len(heatmaps)>10:
+    if len(heatmaps)>15:
         old_heatmap = heatmaps.pop(0)
         heatmap_sum -= old_heatmap
         heatmap_sum = np.clip(heatmap_sum,0.0,1000000.00)
