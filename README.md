@@ -38,7 +38,17 @@ The steps taken to complete this project are as follows:
 
 ### Feature Extraction
 
-The first step of the pipeline is to identify and extract features from the data, which we can then train a classifier on to predict the presence of vehicles in an image. The dataset is a combination of the [GTI vehicle image database](http://www.gti.ssr.upm.es/data/Vehicle_database.html), the [KITTI vision benchmark suite](http://www.cvlibs.net/datasets/kitti/), and examples extracted from the project video itself. The data is split into vehicles and non-vehicles subsets, and examples of a vehicle image (left) and non-vehicle image can be seen below:
+The first step of the pipeline is to identify and extract features from the data, which we can then train a classifier on to predict the presence of vehicles in an image. The dataset is a combination of the [GTI vehicle image database](http://www.gti.ssr.upm.es/data/Vehicle_database.html), the [KITTI vision benchmark suite](http://www.cvlibs.net/datasets/kitti/), and examples extracted from the project video itself. The data is split into vehicles and non-vehicles subsets, and examples of a vehicle image (left) and non-vehicle image (right) can be seen below:
 
 ![Vehicle Image](data/vehicles/GTI_Far/image0000.png)   ![Non-Vehicle Image](data/non-vehicles/GTI/image31.png)
+
+Features were extracted using a combination of Histogram Of Gradients (HOG), spatial binning of the color image, and histogram of pixel intensity (color histogram). The HOG features were found using the sklearn `hog()` function, and the parameters used were found by trial and error. Some of the parameters I found to be most effective were: `orient=9`, `pixels_per_cell=(8, 8)`, and  `cells_per_block=(2, 2)`. The code for extracting the HOG features can be found on lines 9-26 of the `features.py` file. The function `bin_spatial()` was used to resize the images to 32x32 resolution and transform it into a vector, and the code can be found on lines 29-33 of the `features.py` file. The code for creating a color histogram of the images can be found in the function `color_hist()` on lines 36-43 of the `features.py` file. I wrapped all of these functions in the `extract_features()` function, which outputs one feature vector for each image. A visualization of HOG features of a vehicle (left) and non-vehicle (right) can be seen below:
+
+![Vehicle Hog](output_images/hog7.jpg)      ![Non-Vehicle Hog](output_images/hog8.jpg)
+
+
+### Train a Classifier
+
+
+
 
