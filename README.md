@@ -68,6 +68,8 @@ In order to reduce false positives, and make the bounding boxes more consistent 
 
 Bounding boxes are displayed on the images around detected cars using the `draw_labeled_bboxes()` function in the `detect_cars.py` file. This function is passed the labels aka blobs of the heatmaps mentioned above. By using an average of the heatmaps over 15 frames of video, the result is a smooth and consistent bounding box around vehicles without any false positives in the project video.
 
+A link to my final output video can be found [here](https://youtu.be/1vs3swn7D44)
+
 
 ### Discussion
 
