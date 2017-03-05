@@ -30,10 +30,15 @@ The goal of this project is to produce a robust pipeline for detecting vehicles 
 The steps taken to complete this project are as follows:
 
 * Perform feature extraction using Histogram of Oriented Gradients (HOG), apply a color transform and append binned color features, as well as histograms of color, to the HOG feature vector.
-* Train a Linear SVM classifier on the extracted features.
+* Train a Linear Support Vector Machine (SVM) classifier on the extracted features.
 * Implement a sliding-window technique with the trained classifier to detect vehicles in an image.
 * Create a heatmap of recurring detections to reject outliers.
 * Output visual display of bounding boxes around detected vehicles in a video stream.
 
 
 ### Feature Extraction
+
+The first step of the pipeline is to identify and extract features from the data, which we can then train a classifier on to predict the presence of vehicles in an image. The dataset is a combination of the [GTI vehicle image database](http://www.gti.ssr.upm.es/data/Vehicle_database.html), the [KITTI vision benchmark suite](http://www.cvlibs.net/datasets/kitti/), and examples extracted from the project video itself. The data is split into vehicles and non-vehicles subsets, and examples of a vehicle image (left) and non-vehicle image can be seen below:
+
+![Vehicle Image](data/vehicles/GTI_Far/image0000.png)   ![Non-Vehicle Image](data/non-vehicles/GTI/image31.png)
+

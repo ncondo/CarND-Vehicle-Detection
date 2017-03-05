@@ -122,7 +122,6 @@ def process_image(img):
     out_img, heat_map = find_cars(img, scale=scale, ystart=ystart, ystop=ystop,
                             pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
                             orient=orient, spatial_size=spatial_size, hist_bins=hist_bins)
-    #heat_map = apply_threshold(heat_map, 1)
 
     global heatmap_sum
     global heatmaps

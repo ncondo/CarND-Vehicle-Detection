@@ -8,12 +8,8 @@ import pickle
 import numpy as np
 import cv2
 import glob
-from detect_car import find_cars, apply_threshold, draw_labeled_bboxes
+from detect_cars import find_cars, apply_threshold, draw_labeled_bboxes
 
-
-# Load classifier for predicting cars
-svc = joblib.load('classifier.pkl')
-X_scaler = pickle.load(open('scaler.p', 'rb'))
 
 def display_hog(images):
 
@@ -76,6 +72,7 @@ def display_bboxes(images):
 
 if __name__=='__main__':
 
+    # Load list of images to show viz
     test_images = glob.glob('./test_images/test*.jpg')
     # Display hog features on test images
     display_hog(test_images)
