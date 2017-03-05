@@ -32,7 +32,7 @@ The steps taken to complete this project are as follows:
 * Perform feature extraction using Histogram of Oriented Gradients (HOG), apply a color transform and append binned color features, as well as histograms of color, to the HOG feature vector.
 * Train a Linear Support Vector Machine (SVM) classifier on the extracted features.
 * Implement a sliding-window technique with the trained classifier to detect vehicles in an image.
-* Create a heatmap of recurring detections to reject outliers.
+* Create a heatmap of recurring detections to reduce false positives.
 * Output visual display of bounding boxes around detected vehicles in a video stream.
 
 
@@ -49,6 +49,27 @@ Features were extracted using a combination of Histogram Of Gradients (HOG), spa
 
 ### Train a Classifier
 
+Once the features were extracted from the images, I used them to train a classifier for detecting vehicles in an image. I used a Linear SVM as my classifier, feeding in the normalized feature vectors for vehicles and non-vehicles. Normalization was performed using the sklearn `StandardScaler()` function. The data was also selected randomly using the sklearn `train_test_split()` function, and 10% of the data was held out as the test set. All of the code for training the classifier can be found in the `classifier.py` file.
 
 
+### Detect Vehicles In Unseen Images
+
+I implemented a sliding window technique to search a portion of an image to predict whether or not a vehicle was present. In order to increase efficiency, I reduced the search area by setting a region of interest which excluded the top half of the image, and also reduced the image size by 1.5. As the window slides along the search area, the classifier is used to predict whether or not a vehicle is present based on the features in that sample. The code for detecting cars can be found in the `find_cars()` function on lines 23-86 of the `detect_cars.py` file.
+
+
+### Reduce False Positives
+
+In order to reduce false positives, and make the bounding boxes more consistent and smoother between frames of a video stream, I used a heatmap of the positive detections reported by the classifier. I keep an average of the heatmaps over 15 frames of video, and use a threshold to remove false positives. The scipy `label()` function was used to identify "blobs" in the heatmap, which correlated to vehicles in the image. The code for adding the detections to the heatmap can be found on line 84 of the `detect_cars.py` file, and the function which applies the threshold can be found on lines 89-92 of the same file. An example of an input image (left) and a heatmap applied to that image (right) is shown below:
+
+![Original Image](test_images/test_example4.jpeg)   ![Output Image](output_images/heatmap_example4.jpeg)
+
+
+### Visual Display
+
+Bounding boxes are displayed on the images around detected cars using the `draw_labeled_bboxes()` function in the `detect_cars.py` file. This function is passed the labels aka blobs of the heatmaps mentioned above. By using an average of the heatmaps over 15 frames of video, the result is a smooth and consistent bounding box around vehicles without any false positives in the project video.
+
+
+### Discussion
+
+Although this pipeline works well on the project video, it does not process the video in real time, so it is currently not a suitable production pipeline. My machine was able to process the video at only 5 frames per second. I plan to explore more modern approaches which are able to perform detection in real time, such as SSD and YOLO. Another issue my pipeline faces is detecting cars which are occluded by another vehicle. There is a segment of the project video where two cars driving next to each other are detected as one vehicle, producing only one bounding box around the two cars. Finally, my pipeline currently does not detect vehicles which are relatively far away. Ideally the pipeline should be able to detect any car in the camera's view, just as humans are able to see what traffic is doing up ahead.
 
